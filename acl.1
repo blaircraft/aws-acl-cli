@@ -1,0 +1,96 @@
+ACL(1)                     General Commands Manual                    ACL(1)
+
+NAME
+       acl - Manage AWS Network ACLs (NACLs)
+
+SYNOPSIS
+       acl [GLOBAL OPTIONS] COMMAND [COMMAND OPTIONS]
+
+DESCRIPTION
+       The `acl` command is used to manage AWS Network ACLs (NACLs) in
+       a specified VPC. It supports global options that apply to all
+       subcommands, as well as subcommand-specific options.
+
+GLOBAL OPTIONS
+       --profile, -p PROFILE
+              Specify the AWS profile to use for authentication. This
+              option is required for all subcommands.
+
+       --region, -r REGION
+              Specify the AWS region to use. Defaults to `ca-central-1`
+              if not provided.
+
+SUBCOMMANDS
+       create
+           Create a new Network ACL in a specified VPC.
+
+       modify
+           Modify the rules of an existing Network ACL.
+
+       delete
+           Delete a specified Network ACL.
+
+OPTIONS
+       Subcommand: create
+       --vpc-id, -v VPC_ID
+              Specify the ID of the VPC in which the NACL should be
+              created. This option is required.
+
+       --network-acl, -n FILE
+              Path to a text file defining the rules for the NACL. The
+              file must follow the format described in acl-file(5). If
+              this option is not provided, a terminal UI will be
+              launched for manual rule entry.
+
+       --acl-name, -a NAME
+              Specify the name of the Network ACL. If not provided, a
+              random name will be generated.
+
+       Subcommand: modify
+       --acl-id, -a ACL_ID
+              Specify the ID of the Network ACL to modify. This option
+              is required.
+
+       --network-acl, -n FILE
+              Path to a text file defining the rules for the NACL. The
+              file must follow the format described in acl-file(5). If
+              this option is not provided, the command exits.
+
+       Subcommand: delete
+       NETWORK-ACL-ID
+              The ID of the Network ACL to delete. This argument is
+              required. The command deletes the specified Network ACL
+              along with all associated rules (entries), unless the ACL
+              is a default ACL.
+
+EXAMPLES
+       Create a Network ACL using a predefined rules file:
+              acl create --profile default --vpc-id vpc-0abcd1234 \
+                  --network-acl /path/to/acl-file.txt --acl-name my-nacl
+
+       Modify an existing Network ACL:
+              acl modify --profile default --acl-id acl-01e512aa82d49cad0 \
+                  --network-acl /path/to/acl-file.txt
+
+       Delete a Network ACL:
+              acl delete --profile default acl-01e512aa82d49cad0
+
+NOTES
+       - The `acl` command requires valid AWS credentials configured
+         under the specified profile.
+       - Default Network ACLs cannot be deleted. The command will exit
+         with an error if the specified ACL is a default.
+
+FILES
+       ~/.aws/credentials
+              AWS credentials file used to authenticate requests.
+
+       ~/.aws/config
+              AWS configuration file used for region and profile
+              defaults.
+
+SEE ALSO
+       acl-file(5), aws(1), boto3(3)
+
+AUTHOR
+       Written by an automated system for managing AWS network ACLs.

@@ -1,0 +1,9 @@
+[inbound]
+100 tcp 22 10.1.0.0/16 allow
+200 tcp 22 0/0 deny
+300 all - 0/0 allow
+
+[outbound]
+100 tcp 22 10.1.0.0/16 allow
+200 tcp 22 0/0 deny
+300 tcp 1024-65535 0.0.0.0/0 allow
